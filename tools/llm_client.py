@@ -5,6 +5,7 @@ MODEL_NAME = "gemma3:4b"
 def ask_llm(prompt):
 
     try:
+
         response = ollama.chat(
             model=MODEL_NAME,
             messages=[
@@ -18,5 +19,7 @@ def ask_llm(prompt):
         return response["message"]["content"]
 
     except Exception as e:
-        print(f"LLM Error: {e}")
+
+        print("LLM Error:", e)
+
         return "Error generating response."

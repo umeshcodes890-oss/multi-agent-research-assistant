@@ -9,9 +9,26 @@ client = TavilyClient(
 )
 
 def search_web(query):
+
     result = client.search(
         query=query,
         max_results=5
     )
 
-    return result["results"]
+    formatted_results = []
+
+    for item in result["results"]:
+
+        formatted_results.append(
+            f"""
+TITLE: {item.get('title', '')}
+
+CONTENT:
+{item.get('content', '')}
+
+SOURCE:
+{item.get('url', '')}
+"""
+        )
+
+    return formatted_results

@@ -1,25 +1,29 @@
 from tools.llm_client import ask_llm
 
 def critic_agent(state):
+
     print("Running Critic Agent...")
+
     report = state["draft_report"]
 
     prompt = f"""
-    Review this report.
+    You are a research reviewer.
+
+    Review the report.
 
     Evaluate:
 
     - Missing information
     - Weak arguments
     - Unsupported claims
-    - Bias
     - Clarity
+    - Structure
 
     Report:
 
     {report}
 
-    Return improvement suggestions.
+    Return concise improvement suggestions.
     """
 
     critique = ask_llm(prompt)
