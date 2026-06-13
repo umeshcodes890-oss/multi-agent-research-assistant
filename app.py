@@ -1,7 +1,8 @@
 import streamlit as st
 from workflows.research_graph import graph
 from tools.pdf_generator import generate_pdf
-
+from tools.history import get_topics
+from tools.history import get_report
 # --------------------------------------------------
 # PAGE CONFIG
 # --------------------------------------------------
@@ -16,6 +17,19 @@ st.set_page_config(
 # --------------------------------------------------
 # CUSTOM CSS
 # --------------------------------------------------
+st.markdown("""
+# 🚀 ReAssist AI
+
+### Research Faster. Think Smarter.
+
+Multi-Agent Research Intelligence Platform powered by:
+
+- 🧠 Gemma 3
+- 🌐 Tavily Search
+- 💾 ChromaDB Memory
+- 🔄 LangGraph
+
+""")
 
 st.markdown("""
 <style>
@@ -47,7 +61,6 @@ st.markdown("""
 # --------------------------------------------------
 # SIDEBAR
 # --------------------------------------------------
-
 with st.sidebar:
 
     st.title("🚀 ReAssist AI")
@@ -62,21 +75,50 @@ with st.sidebar:
 
     st.markdown("---")
 
+    st.subheader("📚 Recent Research")
+
+    topics = get_topics()
+
+    for topic in reversed(topics[-5:]):
+
+        if st.button(
+            topic,
+            use_container_width=True
+        ):
+
+            st.session_state["selected_report"] = topic
+
+        st.markdown("---")
+
     st.subheader("Agents")
 
-    st.write("🧠 Planner Agent")
-    st.write("💾 Memory Agent")
-    st.write("🌐 Search Agent")
-    st.write("📚 Research Agent")
-    st.write("✍ Writer Agent")
-    st.write("🔍 Critic Agent")
+    st.write("🧠 Planner")
+    st.write("💾 Memory")
+    st.write("🌐 Search")
+    st.write("📚 Research")
+    st.write("✍ Writer")
+    st.write("🔍 Critic")
     st.write("✅ Fact Checker")
     st.write("🎯 Supervisor")
 
     st.markdown("---")
 
-    st.caption("Built with LangGraph + Ollama")
+    st.caption("ReAssist AI v1.0")
+# --------------------------------------------------
+# VIEW PREVIOUS REPORT
+# --------------------------------------------------
 
+if "selected_report" in st.session_state:
+
+    topic_name = st.session_state["selected_report"]
+
+    report = get_report(topic_name)
+
+    st.header(f"📖 {topic_name}")
+
+    st.markdown(report)
+
+    st.stop()    
 # --------------------------------------------------
 # HEADER
 # --------------------------------------------------
@@ -87,37 +129,27 @@ st.caption(
     "Agentic AI Research Assistant powered by Ollama, Tavily, ChromaDB and LangGraph"
 )
 
+
+
 # --------------------------------------------------
 # METRICS
 # --------------------------------------------------
 
+history_count = len(get_topics())
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric(
-        label="Agents",
-        value="8"
-    )
+    st.metric("Agents", "8")
 
 with col2:
-    st.metric(
-        label="LLM",
-        value="Gemma 3"
-    )
+    st.metric("Reports", history_count)
 
 with col3:
-    st.metric(
-        label="Memory",
-        value="ChromaDB"
-    )
+    st.metric("LLM", "Gemma 3")
 
 with col4:
-    st.metric(
-        label="Search",
-        value="Tavily"
-    )
-
-st.markdown("---")
+    st.metric("Memory", "ChromaDB")
 
 # --------------------------------------------------
 # INPUT

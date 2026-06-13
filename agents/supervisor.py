@@ -1,6 +1,6 @@
 from tools.memory import save_memory
 from tools.llm_client import ask_llm
-
+from tools.history import save_history
 MAX_REVISIONS = 2
 
 
@@ -26,6 +26,7 @@ def supervisor_agent(state):
     )
 
     if revisions >= MAX_REVISIONS:
+        save_history(state["topic"],draft_report)
 
         save_memory(
             state["topic"],
@@ -66,6 +67,8 @@ finish
             "next_step": "rewrite",
             "revision_count": revisions + 1
         }
+    
+    save_history(state["topic"],draft_report)
 
     save_memory(
         state["topic"],
