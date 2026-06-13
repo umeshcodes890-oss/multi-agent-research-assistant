@@ -7,7 +7,7 @@ from tools.pdf_generator import generate_pdf
 # --------------------------------------------------
 
 st.set_page_config(
-    page_title="ResearchGPT",
+    page_title="ReAssist AI",
     page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -50,7 +50,7 @@ st.markdown("""
 
 with st.sidebar:
 
-    st.title("🚀 ResearchGPT")
+    st.title("🚀 ReAssist AI")
 
     st.markdown("---")
 
@@ -81,7 +81,7 @@ with st.sidebar:
 # HEADER
 # --------------------------------------------------
 
-st.title("🤖 ResearchGPT")
+st.title("🤖 ReAssist AI")
 
 st.caption(
     "Agentic AI Research Assistant powered by Ollama, Tavily, ChromaDB and LangGraph"
