@@ -1,34 +1,53 @@
 from tools.llm_client import ask_llm
 
+
 def research_agent(state):
 
-    print("Running Research Agent...")
+    print(
+        "Running Research Agent..."
+    )
+
+    memory = state.get(
+        "memory",
+        ""
+    )
+    academic_sources = state.get(
+    "academic_sources",
+    ""
+)
+
 
     sources = state["sources"]
 
     prompt = f"""
-    You are a senior research analyst.
+You are a senior research analyst.
 
-    Analyze the following research sources.
+Previous Knowledge:
 
-    Extract:
+{memory}
 
-    1. Executive Summary
-    2. Key Findings
-    3. Important Facts
-    4. Statistics
-    5. Trends
-    6. Challenges
-    7. Future Opportunities
+Web Sources:
 
-    Sources:
+{sources}
 
-    {sources}
+Create detailed research notes.
 
-    Return detailed research notes.
-    """
+Include:
 
-    research = ask_llm(prompt)
+1. Executive Summary
+2. Key Findings
+3. Important Facts
+4. Statistics
+5. Trends
+6. Challenges
+7. Future Opportunities
+
+Return detailed notes only.
+"""
+
+    research = ask_llm(
+        prompt
+    )
 
     return {
         "research": research

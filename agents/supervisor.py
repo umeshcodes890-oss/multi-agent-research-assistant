@@ -1,17 +1,36 @@
+from tools.memory import save_memory
 from tools.llm_client import ask_llm
 
 MAX_REVISIONS = 2
 
+
 def supervisor_agent(state):
 
-    print("Running Supervisor Agent...")
+    print(
+        "Running Supervisor Agent..."
+    )
 
-    critique = state.get("critique", "")
-    revisions = state.get("revision_count", 0)
+    critique = state.get(
+        "critique",
+        ""
+    )
 
-    draft_report = state.get("draft_report", "")
+    revisions = state.get(
+        "revision_count",
+        0
+    )
+
+    draft_report = state.get(
+        "draft_report",
+        ""
+    )
 
     if revisions >= MAX_REVISIONS:
+
+        save_memory(
+            state["topic"],
+            draft_report
+        )
 
         return {
             "next_step": "finish",
@@ -19,24 +38,27 @@ def supervisor_agent(state):
         }
 
     prompt = f"""
-    Critique:
+Critique:
 
-    {critique}
+{critique}
 
-    Decide:
+Reply ONLY:
 
-    revise
+revise
 
-    or
+or
 
-    finish
+finish
+"""
 
-    Reply with ONE WORD only.
-    """
+    decision = ask_llm(
+        prompt
+    ).lower()
 
-    decision = ask_llm(prompt).strip().lower()
-
-    print("Supervisor Decision:", decision)
+    print(
+        "Supervisor:",
+        decision
+    )
 
     if "revise" in decision:
 
@@ -44,6 +66,11 @@ def supervisor_agent(state):
             "next_step": "rewrite",
             "revision_count": revisions + 1
         }
+
+    save_memory(
+        state["topic"],
+        draft_report
+    )
 
     return {
         "next_step": "finish",
